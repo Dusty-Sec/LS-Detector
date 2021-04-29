@@ -17,7 +17,7 @@ def grayimage(image):
 #mask_yellow = cv2.inRange(gray_image,lower_yellow,upper_yellow)
 
 def masking(gray_image):
-    mask_white = cv2.inRange(gray_image,170,255)
+    mask_white = cv2.inRange(gray_image,230,255)
 
     #mask_yw = cv2.bitwise_or(mask_white,mask_yellow)
     mask_yw_image = cv2.bitwise_and(gray_image,mask_white)
@@ -38,7 +38,7 @@ def roi(canny_img):
     height = canny_img.shape[0]
     width = canny_img.shape[1]
     #print(height,width)
-    polygons = np.array([[(0,height-40),(550,height),(388,251)]])
+    polygons = np.array([[(0,height-30),(550,height),(500,310)]])
     mask = np.zeros_like(canny_img)
     cv2.fillPoly(mask,polygons,255)
     return cv2.bitwise_and(canny_img,mask)
@@ -49,8 +49,9 @@ def tlines(edges,image):
     #lines = cv2.HoughLinesP(masked_image,2,np.pi/180,100,np.array([]),minLineLength=40,maxLineGap=5)
     lines = cv2.HoughLinesP(edges, 2, np.pi / 180,100,np.array([]),MinLineLength,MaxLineGap)
     #print(lines)
-    for x1,y1,x2,y2 in lines[0]:
-        cv2.line(image,(x1,y1),(x2,y2),(0,255,0),8)
+    for coordinates in lines[0]:
+        for x1,y1,x2,y2 in coordinates:
+            cv2.line(image,(x1,y1),(x2,y2),(0,220,200),8)
         
 def writeimage(image):
     cv2.imwrite("result.jpg",image)
